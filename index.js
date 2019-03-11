@@ -1,30 +1,36 @@
-var reverseSwitches = require('./reverseSwitches.json')
 var switches = require('./switches.json')
-var word = "father ship"
-
-// console.log(reverseGrimm(word))
-// console.log(grimm("pater"))
-
-function reverseGrimm (word) {
-  if (word.length === 0) return ""
-
-  for (var candidate in reverseSwitches) {
-    if (candidate === word.slice(0, candidate.length)) {
-      return reverseSwitches[candidate] + reverseGrimm(word.slice(candidate.length))
-    }
-  }
-  return word.slice(0,1) + reverseGrimm(word.slice(1))
-}
+var sampleWord = "father"
 
 function grimm (word) {
+  var sortedSwitches = switches.sort(function(a, b) {
+    return  b[0].length - a[0].length
+  })
+
   if (word.length === 0) return ""
 
-  for (var candidate in switches) {
-    if (candidate === word.slice(0, candidate.length)) {
-      return switches[candidate] + grimm(word.slice(candidate.length))
+  for (var i in sortedSwitches) {
+    candidate = sortedSwitches[i]
+    if (candidate[0] === word.slice(0, candidate[0].length)) {
+      return candidate[1] + grimm(word.slice(candidate[0].length))
     }
   }
   return word.slice(0,1) + grimm(word.slice(1))
+}
+
+function reverseGrimm (word) {
+  var sortedSwitches = switches.sort(function(a, b) {
+    return b[1].length - [1].length
+  })
+
+  if (word.length === 0) return ""
+
+  for (var i in sortedSwitches) {
+    candidate = sortedSwitches[i]
+    if (candidate[1] === word.slice(0, candidate[1].length)) {
+      return candidate[0] + reverseGrimm(word.slice(candidate[1].length))
+    }
+  }
+  return word.slice(0,1) + reverseGrimm(word.slice(1))
 }
 
 module.exports.grimm = grimm
